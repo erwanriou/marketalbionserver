@@ -31,10 +31,12 @@ router.get("/api/albion/public/item/list", async (req, res) => {
     {
       $match: {
         // NAME FILTERING
-        item_id: !!item_id ? { $in: [item_id] } : { $ne: false },
+        item_id: !!item_id
+          ? new RegExp(item_id, "i")
+          : { $ne: false || "UNDEFINED" },
         // CITY FILTERING
-        city: !!city ? { $in: [city] } : { $ne: false },
         city: { $nin: ["Brecilien", "Black Market"] },
+        city: !!city ? { $in: [city] } : { $ne: false || null },
         // DATE FILTERING
         buy_price_max_date: !!date ? { $in: [date] } : { $ne: false },
         // PRICE FILTERING
@@ -53,8 +55,52 @@ router.get("/api/albion/public/item/list", async (req, res) => {
       },
     },
     {
+      $project: {
+        _id: 0,
+        item_id: 1,
+        city: 1,
+        sell_price_min: 1,
+        sell_price_max: 1,
+        buy_price_min: 1,
+        buy_price_max: 1,
+        buy_price_max_date: 1,
+        difference_pct: {
+          $cond: [
+            {
+              $and: [
+                { $ne: ["$buy_price_max", null] },
+                { $gt: [{ $toDouble: "$buy_price_max" }, 0] },
+              ],
+            },
+            {
+              $multiply: [
+                {
+                  $divide: [
+                    {
+                      $subtract: [
+                        { $toDouble: "$sell_price_min" },
+                        { $toDouble: "$buy_price_max" },
+                      ],
+                    },
+                    { $toDouble: "$buy_price_max" },
+                  ],
+                },
+                100,
+              ],
+            },
+            null, // or 0 if you prefer
+          ],
+        },
+      },
+    },
+    {
+      $sort: {
+        difference_pct: -1,
+      },
+    },
+    {
       $facet: {
-        products: [
+        items: [
           { $skip: Number(page) * Number(limit) },
           { $limit: Number(limit) },
         ],
