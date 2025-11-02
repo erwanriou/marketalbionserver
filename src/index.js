@@ -5,6 +5,6 @@ const transaction = require("./services/transactions");
 transaction("Market Albion Server");
 
 // LISTEN APP
-app.listen(3000, () =>
-  console.log("Market Albion Server listening on port 3000!"),
+app.listen(5000, () =>
+  console.log("Market Albion Server listening on port 5000!"),
 );

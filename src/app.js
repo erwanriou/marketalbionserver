@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 
 // IMPORT ROUTES & JOBS
 require("./jobs");
-// const routes = require("./routes");
+const routes = require("./routes");
 
 // LAUNCH EXPRESS
 const app = express();
@@ -19,6 +19,6 @@ app.use(cookieParser());
 app.use(compression());
 
 // USE JOBS
-// routes.map((route) => app.use("/", route));
+routes.map((route) => app.use("/", route));
 
 module.exports = app;

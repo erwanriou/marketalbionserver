@@ -12,8 +12,8 @@ const requires = (paths) => {
 };
 
 const paths = {
-  admin: {
-    job: [],
+  public: {
+    item: ["filters", "list"],
   },
 };
 
