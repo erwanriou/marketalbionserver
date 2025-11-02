@@ -18,6 +18,7 @@
     "express": "^5.1.0",
     "mongoose": "^8.19.2",
     "nodemon": "^3.1.10",
+    "papaparse": "^5.5.3",
     "tslib": "^2.8.1"
   }
 }
