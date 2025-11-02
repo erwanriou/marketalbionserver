@@ -51,7 +51,7 @@ cron.define(
 
 cron.on("ready", async () => {
   await cron.processEvery(2000);
-  await cron.every("*/5 1 * * *", "queryItemsData");
+  await cron.every("*/5 * * * *", "queryItemsData");
   await cron.start();
 });
 
